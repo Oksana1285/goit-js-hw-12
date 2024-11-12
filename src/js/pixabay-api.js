@@ -1,20 +1,25 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import axios from 'axios';
+import { fetchLoad } from './render-functions';
 
 const messages = {
-  Info: 'Please enter a value in the search field!',
-  Warning:
-    'Sorry, there are no images matching your search query. Please try again!',
-  Error:
-    'Sorry, there are no connection to the server. Please try again later! ',
-  Exception:
-    'Exception: We have some issue with connection. Please try again later! ',
+  info: `Please enter a value in the search field!`,
+  endOfSearch: `We're sorry, but you've reached the end of search results.`,
+  warning: `Sorry, there are no images matching your search query. Please try again!`,
+  error: `Sorry, there are no connection to the server. Please try again later!`,
+  exception: `Exception: We have some issue with connection. Please try again later!`,
 };
 
-const messegesBgColor = {
+const messagesBgColor = {
   green: '#14b454',
   yellow: '#e52a2a',
   red: '#e5c32a',
+};
+
+const typeEvent = {
+  click: 'click',
+  submit: 'submit',
 };
 
 function showMessage(message, color) {
@@ -25,35 +30,45 @@ function showMessage(message, color) {
   });
 }
 
-export { messages, messegesBgColor, showMessage };
-
-const options = {
-  method: 'GET',
-};
+export { typeEvent, messages, messagesBgColor, showMessage };
 
 const API_KEY = '46849284-22f4e981648a1afff2e3fd4a3';
 const API_URL = 'https://pixabay.com/api/?';
+const configuration = {
+  params: {
+    key: API_KEY,
+    image_type: 'photo',
+    orientations: 'horizontal',
+    safesearch: true,
+    page: 1,
+    per_page: 15,
+  },
+};
 
-export async function getGallery(queryValue) {
+export async function getGallery(queryValue, page) {
   try {
-    const searchParams = new URLSearchParams({
-      key: API_KEY,
-      q: queryValue,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-    });
-
-    const response = await fetch(API_URL + searchParams, options).then();
-    if (!response.ok) {
-      showMessage(messages.Error, messegesBgColor.yellow);
-      return;
-    }
-    return await response.json();
+    fetchLoad();
+    configuration.params.page = page;
+    configuration.params.query = queryValue;
+    const response = await axios.get(API_URL, configuration);
+    return response.data;
   } catch (error) {
-    showMessage(
-      `${messages.Exception} ERROR: ${error}`,
-      messegesBgColor.yellow
-    );
+    if (error.response) {
+      const { data } = error.response;
+      showMessage(
+        `${messages.exception} ERROR: ${data}`,
+        messagesBgColor.yellow
+      );
+    } else if (error.request) {
+      showMessage(
+        `${messages.exception} ERROR: ${error.request}`,
+        messagesBgColor.yellow
+      );
+    } else {
+      showMessage(
+        `${messages.exception} ERROR: ${error.message}`,
+        messagesBgColor.yellow
+      );
+    }
   }
 }
