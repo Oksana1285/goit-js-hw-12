@@ -49,7 +49,7 @@ export async function getGallery(queryValue, page) {
   try {
     fetchLoad();
     configuration.params.page = page;
-    configuration.params.query = queryValue;
+    configuration.params.q = queryValue;
     const response = await axios.get(API_URL, configuration);
     return response.data;
   } catch (error) {
