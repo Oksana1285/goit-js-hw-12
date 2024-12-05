@@ -28,7 +28,7 @@ loadBtn.addEventListener('click', async () => {
     const { height } = item.getBoundingClientRect();
     scroll(height * 2, 0);
   } catch (error) {
-    showMessage(messages.exception + error, messagesBgColor.yellow);
+    showMessage(messages.exception + error.messages, messagesBgColor.yellow);
   }
 });
 
@@ -61,7 +61,7 @@ async function onSubmitForm(evt) {
 
     target.reset();
   } catch (error) {
-    showMessage(messages.exception + error, messagesBgColor.yellow);
+    showMessage(messages.exception + error.messages, messagesBgColor.yellow);
   }
 }
 
@@ -82,7 +82,7 @@ async function renderGallery(searchValue, page) {
       showBtn(restImages);
     }
   } catch (error) {
-    showMessage(messages.exception + error, messagesBgColor.yellow);
+    showMessage(messages.exception + error.messages, messagesBgColor.yellow);
   }
 }
 

@@ -152,16 +152,31 @@ button {
 .loader-wrapper {
   width: 100%;
   margin: auto;
+  position: relative;
 }
 
 .loader {
-  display: grid;
-  width: 50px;
-  margin: auto;
+  font-size: 24px;
+  display: block;
+  letter-spacing: 2px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3b0303;
+  box-sizing: border-box;
+  animation: animloader 1s ease-in infinite alternate;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* margin-right: -50%; */
+  transform: translate(-50%, -50%);
 }
 
-@keyframes l12 {
+@keyframes animloader {
+  0% {
+    filter: blur(0px);
+    transform: skew(0deg);
+  }
   100% {
-    transform: rotate(0.5turn);
+    filter: blur(3px);
+    transform: skew(-4deg);
   }
 }

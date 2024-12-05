@@ -43,9 +43,9 @@ function createGallery(arr) {
 
 export function fetchLoad() {
   gallery.insertAdjacentHTML(
-    'beforeend',
+    'afterEnd',
     `<div class='loader-wrapper'>
-        <div class='loader'></div>
+    <span class="loader">Loading</span>
     </div>`
   );
 }
